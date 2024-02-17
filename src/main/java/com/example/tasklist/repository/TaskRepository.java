@@ -11,7 +11,7 @@ public interface TaskRepository {
 
     List<Task> findAllByUserId(Long userId);
 
-    void assignToUserById();
+    void assignToUserById(Long taskId, Long userId);
 
     void update(Task task);
 
