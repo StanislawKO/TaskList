@@ -75,7 +75,7 @@
         VALUES (#{userId}, #{role})
     </insert>
 
-    <select id="isTaskOwner" resultMap="boolean">
+    <select id="isTaskOwner" resultType="boolean">
         SELECT exists(
         select 1
         from users_tasks
