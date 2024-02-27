@@ -22,7 +22,7 @@
     </resultMap>
 
     <select id="findById" resultMap="UserResultMap">
-        SELECT u.id              as user_id,
+        SELECT u.id       as user_id,
         u.name            as user_name,
         u.username        as user_username,
         u.password        as user_password,
@@ -40,7 +40,7 @@
     </select>
 
     <select id="findByUsername" resultMap="UserResultMap">
-        SELECT u.id              as user_id,
+        SELECT u.id       as user_id,
         u.name            as user_name,
         u.username        as user_username,
         u.password        as user_password,
