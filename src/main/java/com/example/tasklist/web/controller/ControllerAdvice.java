@@ -1,9 +1,6 @@
 package com.example.tasklist.web.controller;
 
-import com.example.tasklist.domain.exception.AccessDeniedException;
-import com.example.tasklist.domain.exception.ExceptionBody;
-import com.example.tasklist.domain.exception.ResourceMappingException;
-import com.example.tasklist.domain.exception.ResourceNotFoundException;
+import com.example.tasklist.domain.exception.*;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -55,7 +52,7 @@ public class ControllerAdvice {
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionBody handleConstraintViolation (ConstraintViolationException e) {
+    public ExceptionBody handleConstraintViolation(ConstraintViolationException e) {
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed.");
         exceptionBody.setErrors(e.getConstraintViolations().stream()
                 .collect(Collectors.toMap(
@@ -67,14 +64,20 @@ public class ControllerAdvice {
 
     @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionBody handleAuthentication (AuthenticationException e) {
+    public ExceptionBody handleAuthentication(AuthenticationException e) {
         e.printStackTrace();
         return new ExceptionBody("AuthenticationException failed.");
     }
 
+    @ExceptionHandler(ImageUploadException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionBody handleImageUpload(ImageUploadException e) {
+        return new ExceptionBody(e.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ExceptionBody handleException (Exception e) {
+    public ExceptionBody handleException(Exception e) {
         e.printStackTrace();
         return new ExceptionBody("Internal error.");
     }
