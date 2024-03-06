@@ -18,6 +18,6 @@ jobs:
         with:
           path: ~/.m2/repository
           key: maven-${{ hashFiles('**/pom.xml')}}
-          restore-keys:
+          restore-keys: |
             maven-
       - run: mvn clean install
