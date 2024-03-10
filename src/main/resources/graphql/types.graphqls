@@ -27,6 +27,7 @@ input InputTask {
     id: ID
     title: String
     description: String
+    status: String
     expirationDate: LocalDateTime
 }
 
