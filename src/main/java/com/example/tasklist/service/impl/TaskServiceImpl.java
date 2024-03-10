@@ -4,7 +4,6 @@ import com.example.tasklist.domain.exception.ResourceNotFoundException;
 import com.example.tasklist.domain.task.Status;
 import com.example.tasklist.domain.task.Task;
 import com.example.tasklist.domain.task.TaskImage;
-import com.example.tasklist.domain.user.User;
 import com.example.tasklist.repository.TaskRepository;
 import com.example.tasklist.service.ImageService;
 import com.example.tasklist.service.TaskService;
@@ -53,13 +52,21 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    @Cacheable(value = "TaskService::getById", key = "#task.id")
+    @Cacheable(value = "TaskService::getById",
+            condition = "#task.id!=null",
+            key = "#task.id")
     public Task create(final Task task, final Long userId) {
-        User user = userService.getById(userId);
-        task.setStatus(Status.TODO);
+        if (task.getStatus() != null) {
+            task.setStatus(Status.TODO);
+        }
         taskRepository.save(task);
-        user.getTasks().add(task);
-        userService.update(user);
+        taskRepository.assignTask(userId, task.getId());
+
+//        User user = userService.getById(userId);
+//        task.setStatus(Status.TODO);
+//        taskRepository.save(task);
+//        user.getTasks().add(task);
+//        userService.update(user);
         return task;
     }
 
