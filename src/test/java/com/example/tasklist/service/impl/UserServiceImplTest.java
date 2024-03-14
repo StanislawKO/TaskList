@@ -1,6 +1,7 @@
 package com.example.tasklist.service.impl;
 
 import com.example.tasklist.config.TestConfig;
+import com.example.tasklist.domain.MailType;
 import com.example.tasklist.domain.exception.ResourceNotFoundException;
 import com.example.tasklist.domain.user.Role;
 import com.example.tasklist.domain.user.User;
@@ -20,6 +21,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
+import java.util.Properties;
 import java.util.Set;
 
 @ExtendWith(SpringExtension.class)
@@ -39,6 +41,9 @@ public class UserServiceImplTest {
 
     @MockBean
     private PasswordEncoder passwordEncoder;
+
+    @MockBean
+    private MailServiceImpl mailService;
 
     @Autowired
     private UserServiceImpl userService;
@@ -110,18 +115,24 @@ public class UserServiceImplTest {
 
     @Test
     void create() {
-        String username = "username";
+        String username = "username@gmail.com";
         String password = "password";
         User user = new User();
-        user.setName(username);
+        user.setUsername(username);
         user.setPassword(password);
         user.setPasswordConfirmation(password);
         Mockito.when(userRepository.findByUsername(username))
                 .thenReturn(Optional.empty());
+        Mockito.when(passwordEncoder.encode(password))
+                .thenReturn("encodedPassword");
         User testUser = userService.create(user);
         Mockito.verify(userRepository).save(user);
-        Mockito.verify(passwordEncoder).encode(password);
+        Mockito.verify(mailService).sendEmail(user,
+                MailType.REGISTRATION,
+                new Properties());
         Assertions.assertEquals(Set.of(Role.ROLE_USER), testUser.getRoles());
+        Assertions.assertEquals("encodedPassword",
+                testUser.getPassword());
     }
 
     @Test

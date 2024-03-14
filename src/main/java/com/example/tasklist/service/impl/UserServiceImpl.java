@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Cacheable(value = "UserService::getTaskAuthor",
             key = "#taskId")
-    public User getTaskAuthor(Long taskId) {
+    public User getTaskAuthor(final Long taskId) {
         return userRepository.findTaskAuthor(taskId)
                 .orElseThrow(() -> new ResourceNotFoundException("User nof found."));
     }

@@ -11,4 +11,6 @@
     <suppress checks="HiddenField"/>
     <suppress checks="LineLength"/>
     <suppress checks="AvoidStarImport"/>
+    <suppress checks="WhitespaceAround"/>
+    <suppress checks="MemberName"/>
 </suppressions>
